@@ -9,9 +9,9 @@
 - Leap Motion hand sensor
 ### How to run:
 1. Physijs requires worker threads to be hosted separately, so cd to the directory containing index.html and run 
-`python -m http.server`
+> `python -m http.server`
 (python 3)
 or
-`python -m SimpleHTTPServer`
+> `python -m SimpleHTTPServer`
 (python 2)
 2. Use a browser to navigate to localhost:8000/index.html
