@@ -7,7 +7,7 @@
 #### Hardware
 - Oculus Rift, including position sensor
 - Leap Motion hand sensor
-#### How to run:
+### How to run:
 1. Physijs requires worker threads to be hosted separately, so cd to the directory containing index.html and run 
 `python -m http.server`
 (python 3)
