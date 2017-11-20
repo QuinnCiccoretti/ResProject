@@ -11,17 +11,31 @@ THREE.OculusRiftEffect = function ( renderer, options ) {
 	var worldFactor = (options && options.worldFactor) ? options.worldFactor: 1.0;
 
 	// Specific HMD parameters
+
 	var HMD = (options && options.HMD) ? options.HMD: {
-		// Parameters from the Oculus Rift DK1
-		hResolution: 1280,
-		vResolution: 800,
+		// Parameters from the Oculus Rift sdwa\\\\\\\\\\
+		hResolution: 1920, //ok
+		vResolution: 1080,	//ok
 		hScreenSize: 0.14976,
-		vScreenSize: 0.0936,
+		vScreenSize: 0.09356,
 		interpupillaryDistance: 0.064,
 		lensSeparationDistance: 0.064,
 		eyeToScreenDistance: 0.041,
 		distortionK : [1.0, 0.22, 0.24, 0.0],
 		chromaAbParameter: [ 0.996, -0.004, 1.014, 0.0]
+
+		// HResolution = 1280;                      // HMD horizontal resolution in pixels
+		// VResolution = 800;                       // HMD vertical resolution in pixels
+		// HScreenSize = 0.14976f;                 // HMD horizontal size in meters
+		// VScreenSize = 0.09356f;
+		//                 // HMD vertical size in meters
+		// VScreenCenter = 0.04678f;             // HMD screen center in meters
+		// EyeToScreenDistance = 0.041f;        // HMD distance between eye and display in meters
+		// LensSeparationDistance = 0.0635f;   // HMD lens separation distance in meters
+		// InterpupillaryDistance = 0.064f;        // HMD IPD (distance between pupils) in meters
+		// DistortionK = { 1.0f,  0.22f, 0.24f, 0.0f };         // HMD lens distortion constants
+		// ChromaAbCorrection = { 0.996f, -0.004f, 1.014f, 0.0f };      // HMD chromatic aberration correction parameters
+
 	};
 
 	// Perspective camera
@@ -49,8 +63,11 @@ THREE.OculusRiftEffect = function ( renderer, options ) {
 			"scale": { type: "v2", value: new THREE.Vector2(1.0,1.0) },
 			"scaleIn": { type: "v2", value: new THREE.Vector2(1.0,1.0) },
 			"lensCenter": { type: "v2", value: new THREE.Vector2(0.0,0.0) },
+			// "hmdWarpParam": { type: "v4", value: new THREE.Vector4(1.0, 0.22, 0.24, 0.0) },
+			// "chromAbParam": { type: "v4", value: new THREE.Vector4(0.996, -0.004, 1.014, 0.0) }
 			"hmdWarpParam": { type: "v4", value: new THREE.Vector4(1.0,0.0,0.0,0.0) },
 			"chromAbParam": { type: "v4", value: new THREE.Vector4(1.0,0.0,0.0,0.0) }
+
 		},
 		vertexShader: [
 			"varying vec2 vUv;",
