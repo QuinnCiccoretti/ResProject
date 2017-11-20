@@ -13,9 +13,9 @@ THREE.OculusRiftEffect = function ( renderer, options ) {
 	// Specific HMD parameters
 
 	var HMD = (options && options.HMD) ? options.HMD: {
-		// Parameters from the Oculus Rift sdwa\\\\\\\\\\
-		hResolution: 1920, //ok
-		vResolution: 1080,	//ok
+		// Parameters from the Oculus Rift sdk2\\\\\\\\\\
+		hResolution: 1920, //1920 ok for sdk2
+		vResolution: 1080,	//1080 ok for sdk2
 		hScreenSize: 0.14976,
 		vScreenSize: 0.09356,
 		interpupillaryDistance: 0.064,
@@ -56,7 +56,7 @@ THREE.OculusRiftEffect = function ( renderer, options ) {
 
 	// Render target
 	var RTParams = { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat };
-	var renderTarget = new THREE.WebGLRenderTarget( 640, 800, RTParams );
+	var renderTarget = new THREE.WebGLRenderTarget( 1280, 1600, RTParams );
 	var RTMaterial = new THREE.ShaderMaterial( {
 		uniforms: {
 			"texid": { type: "t", value: renderTarget },
