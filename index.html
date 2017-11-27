@@ -14,15 +14,18 @@
 	<script src="js/effects/OculusRiftEffect.js"></script>
 	<script src="js/controls/FirstPersonControls.js"></script>
 	<script src="js/controls/OculusControls.js"></script>
-	<script src ="js/leap.js"></script>
+	
 	<script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
 	<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>
 	<script
-	src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-	integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
-	crossorigin="anonymous">
-</script>
+		src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+		crossorigin="anonymous">
+	</script>
 <!-- Custom code -->
+<script src ="js/leap.js"></script>
+<script src ="js/effect.js"></script>
+<script src ="js/hands.js"></script>
 <!-- <script type="text/javascript" src="js/engine.js"></script> -->
 <script type="text/javascript">
 
@@ -53,31 +56,7 @@
 	var mousehasbeenmoved = false;
 	var last_relv;
 	var pinching = false;
-	function init_bone_meshes() {
-		console.log("----------------------");
-		for (var i = 0; i < 40; i++) {
-			var m = new Physijs.SphereMesh(
-				new THREE.SphereGeometry(0.25),
-				Physijs.createMaterial(new THREE.MeshBasicMaterial({color: 0xff0000}), 1, 1),
-				1
-				);
-			m.addEventListener( 'collision', function( other_object, relative_velocity, relative_rotation, contact_normal ) {
-				// `this` has collided with `other_object` with an impact speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
-				if(checking_collisions){
-					if(other_object.geometry.type != "SphereGeometry"){
-						touched_block = other_object;
-						//console.log("collided! with other:");
-						//console.log(other_object);
-						//last_relv = relative_velocity;
-					}
-				}
-				
-			});
-			boneMeshes.push(m);
-		}
-		console.log("BoneMeshes");
-		console.log(boneMeshes);
-	}
+	
 		
 	function init_renderer(){
 		//set renderer
@@ -113,11 +92,7 @@
 		physics_stats.domElement.style.zIndex = 100;
 		document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
 	}
-	function init_effect(){
-		//Added oculus effect ////////////////////////////////////
-		effect = new THREE.OculusRiftEffect( renderer, { worldScale: 1 } );
-		effect.setSize( window.innerWidth, window.innerHeight );
-	}
+	
 	function init_scene(){
 
 		scene = new Physijs.Scene({ fixedTimeStep: 1 / 30});
@@ -182,20 +157,18 @@
 		
 		// Materials
 		table_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: loader.load( 'images/theydont.jpg' )}),
+			new THREE.MeshLambertMaterial({ map: loader.load( 'images/world.jpg' )}),
 			.9, // high friction
 			.2 // low restitution
 			);
-		table_material.map.wrapS = table_material.map.wrapT = THREE.RepeatWrapping;
-		table_material.map.repeat.set( 5, 5 );
+		
 		
 		block_material = Physijs.createMaterial(
 			new THREE.MeshLambertMaterial({ map: loader.load( 'images/hunna.jpg' )}),
 			0.4, // medium friction
 			.4 // medium restitution
 			);
-		block_material.map.wrapS = block_material.map.wrapT = THREE.RepeatWrapping;
-		block_material.map.repeat.set( 1, .5 );
+		
 		
 		// Table
 		table = new Physijs.BoxMesh(
@@ -229,20 +202,11 @@
 		init_renderer();
 		init_camera();
 		init_effect();
-
-		controls = new THREE.FirstPersonControls( camera );
-		controls.movementSpeed = 40;
-		controls.lookSpeed = .25;
-		controls.lookVertical = true;
-		oculuscontrol = new THREE.OculusControls( camera );
-		
 		init_stats();
-
 		init_scene();
-		
 		window.addEventListener( 'resize', onWindowResize, false );
 		document.addEventListener('keydown', keyPressed, false);
-		//oculuscontrol.connect();//presumably engages oculus tracking
+		//oculuscontrol.connect();//presumably engages oculus tracking REQUIRES SERVER THAT IS NOT INSTALLED
 		//initEventHandling();
 		
 	};
@@ -262,121 +226,10 @@
 		return pos2.sub(pos1).divideScalar(t);
 	}
 	var lastpinching = false;
-	function handlepinch(){
-		//console.log(currentframe);
-		var ray, intersections;
-		// console.log(_vector);
-		var hands = currentframe.hands;
-		
-		if(hands.length>0){
-			
-			var l_hand = currentframe.hands[0];
-			var a = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition).divideScalar(20);
-			var tempa = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition).divideScalar(20);
-			var b = new THREE.Vector3().fromArray(l_hand.thumb.tipPosition).divideScalar(20);
-			lineGeometry.vertices[0] = a;
-			lineGeometry.vertices[1] = b;
-			lineGeometry.verticesNeedUpdate = true;
-			//console.log("A:"+a);
-			//console.log("B:"+b);
-			ray = new THREE.Raycaster( a, b);
-			intersections = ray.intersectObjects( blocks );
-			//console.log("intersections:");
-			//console.log(intersections);
-			//if ( intersections.length > 0 ) {
-			
-			if(l_hand.pinchStrength>.9){	//if we have started pinching something
-				pinching = true;
-			}
-			else{	//if we have stopped pinching something
-				pinching = false;
-				if(touched_block!=null){
-					var onevec = new THREE.Vector3(1,1,1);
-					touched_block.setAngularFactor( onevec );
-					touched_block.setAngularVelocity( onevec );
-					//console.log("Relv:");
-					//console.log(last_relv);
-					
-					if(oldpos!=null){
-						var velo = calcvelocity(oldpos, tempa , 1)
-						console.log("Velo");
-						console.log(velo);
-						touched_block.setLinearFactor( onevec );
-						touched_block.applyCentralImpulse( velo.multiplyScalar(2));
-					}
-					oldpos = tempa;
-				}
-				touched_block = null;
-			}
-				if(pinching && touched_block!=null){
-					// selected_block = intersections[0].object;
-					console.log("Was successful");
-					console.log(touched_block);
-					touched_block.__dirtyRotation = true;
-					touched_block.__dirtyPosition = true;
-					touched_block.position.set( a.x, a.y, a.z );
-			   		//touched_block.rotation.set(0, 90, 180);
-			   		var zvec = new THREE.Vector3(0,0,0);
-			   		touched_block.setAngularFactor( zvec );
-			   		touched_block.setAngularVelocity( zvec );
-			   		touched_block.setLinearFactor( zvec );
-			   		touched_block.setLinearVelocity( zvec );
-					// You may also want to cancel the object's velocity
-					touched_block.setLinearVelocity(new THREE.Vector3(0, 0, 0));
-					touched_block.setAngularVelocity(new THREE.Vector3(0, 0, 0));
-				}
-			
-		//}
-	}
-	if(hands.length>1){
-
-	}
-
-};
 
 
 
 
-draw_hands = function(){
-	if(currentframe == 0){
-		return 0;
-	}
-		//console.log(currentframe);
-		var dat = [];
-		fingers = currentframe.fingers;
-		var count = 0;
-		for (var i = 0; i < fingers.length; i++) {
-			for (var j = 0; j < fingers[i].bones.length; j++) {
-				var b = fingers[i].bones[j];
-				var center = b.center();
-				// console.log("Centers");
-				// // console.log(boneMeshes);
-				// console.log(center);
-				//if(cmesh!=null){
-					var cmesh = boneMeshes[count];
-					//console.log("cmesh");
-					//console.log(cmesh);
-					cmesh.__dirtyRotation = true;
-					cmesh.__dirtyPosition = true;
-					cmesh.position.set( center[0]/20, center[1]/20, center[2]/20 );
-				//}
-		   		//cmesh.rotation.set(0, 90, 180);
-
-				// You may also want to cancel the object's velocity
-				//cmesh.setLinearVelocity(new THREE.Vector3(0, 0, 0));
-				//cmesh.setAngularVelocity(new THREE.Vector3(0, 0, 0));
-				count = count +1;
-			}
-		}
-		//console.log("Count:");
-		//console.log(count);
-		//console.log(boneMeshes);
-		
-		
-		
-
-
-	}
 	
 	render = function() {
 		if(currentframe !=0){
