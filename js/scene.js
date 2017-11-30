@@ -4,6 +4,7 @@ function init_renderer(){
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.shadowMap.enabled = true;
 		renderer.shadowMapSoft = true;
+		renderer.setClearColor (0xffffff, 1);
 		document.getElementById( 'viewport' ).appendChild( renderer.domElement );
 }
 function init_camera(){
@@ -117,3 +118,31 @@ function load_materials(){
 		.4 // medium restitution
 	);
 }
+createTower = (function() {
+		var block_length = 6, block_height = 2, block_width = 0.5, block_offset = 2,
+		block_geometry = new THREE.BoxGeometry( block_length, block_height, block_width );
+		
+		return function() {
+			var i, j, rows =  4,
+			block;
+			
+			for ( i = 0; i < rows; i++ ) {
+				for ( j = 0; j < 3; j++ ) {
+					block = new Physijs.BoxMesh( block_geometry, block_material );
+					block.position.y = (block_height / 2) + block_height * i;
+					if ( i % 2 === 0 ) {
+						block.rotation.y = Math.PI / 2.01; // #TODO: There's a bug somewhere when this is to close to 2
+						block.position.x = block_offset * j - ( block_offset * 3 / 2 - block_offset / 2 );
+					} 
+					else {
+						block.position.z = block_offset * j - ( block_offset * 3 / 2 - block_offset / 2 );
+					}
+					//block.receiveShadow = true;
+					//block.castShadow = true;
+					scene.add( block );
+					blocks.push( block );
+				}
+			}
+			
+		}
+	})();
