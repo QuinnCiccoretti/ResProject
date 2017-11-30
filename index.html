@@ -18,66 +18,47 @@
 	<script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
 	<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>
 	<script
-		src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-		integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
-		crossorigin="anonymous">
-	</script>
+	src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+	integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+	crossorigin="anonymous">
+</script>
 <!-- Custom code -->
 <script src ="js/leap.js"></script>
 <script src ="js/effect.js"></script>
 <script src ="js/hands.js"></script>
+<script src ="js/scene.js"></script>
+<!--/Custom code -->
 <!-- <script type="text/javascript" src="js/engine.js"></script> -->
 <script type="text/javascript">
 
-	var currentframe = 0; //most recent leap data
-	var leapcontroller; 	// for getting leap data
-	'use strict';
-	
-	Physijs.scripts.worker = 'js/physijs_worker.js';
-	Physijs.scripts.ammo = 'ammo.js';
-	
-	var test_block, draw_hands, init_world, initEventHandling, draw_test_block, currmousex, currmousey, render, createTower, loader,
-	renderer, render_stats, physics_stats, scene, dir_light, am_light, camera,
-	table, blocks = [], lhand, rhand,lbock,rblock,table_material, block_material, intersect_plane,
-	selected_block = null, mouse_position = new THREE.Vector3, block_offset = new THREE.Vector3, _i, _v3 = new THREE.Vector3;
-	var touched_block;
-	var lastfingertippos;
-	// var boneboxes = [];
-	var boneMeshes = [];
-	var oldpos;
-	var lineGeometry;
- //    var jointMeshes = [];
- var checking_collisions = false;
-	//from effect demo
-	var realcamera;
-	var guiVisible = true;
-	var mesh, effect, controls, oculuscontrol;
-	var clock = new THREE.Clock();
-	var mousehasbeenmoved = false;
-	var last_relv;
-	var pinching = false;
-	
-		
-	function init_renderer(){
-		//set renderer
-		renderer = new THREE.WebGLRenderer({ antialias: true });
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		renderer.shadowMap.enabled = true;
-		renderer.shadowMapSoft = true;
-		document.getElementById( 'viewport' ).appendChild( renderer.domElement );
-	}
-	function init_camera(){
-		//Init camera ////////////////////
-		camera = new THREE.PerspectiveCamera(
-			35,
+var currentframe = 0; //most recent leap data
+var leapcontroller; 	// for getting leap data
+'use strict';
 
-			window.innerWidth / window.innerHeight,
-			1,
-			1000
-			);
-		camera.position.set( 10, 10, 25 );
-		camera.lookAt(new THREE.Vector3( 0, 7, 0 ));
-	}
+Physijs.scripts.worker = 'js/physijs_worker.js';
+Physijs.scripts.ammo = 'ammo.js';
+
+var test_block, draw_hands, init_world, initEventHandling, draw_test_block, currmousex, currmousey, render, createTower, loader,
+renderer, render_stats, physics_stats, scene, dir_light, am_light, camera,
+table, blocks = [], lhand, rhand,lbock,rblock,table_material, block_material, intersect_plane,
+selected_block = null, mouse_position = new THREE.Vector3, block_offset = new THREE.Vector3, _i, _v3 = new THREE.Vector3;
+var touched_block;
+var lastfingertippos;
+// var boneboxes = [];
+var boneMeshes = [];
+var oldpos;
+var lineGeometry;
+ //    var jointMeshes = [];
+var checking_collisions = false;
+//from effect demo
+var realcamera;
+var guiVisible = true;
+var mesh, effect, controls, oculuscontrol;
+var clock = new THREE.Clock();
+var mousehasbeenmoved = false;
+var last_relv;
+var pinching = false;
+	
 	function init_stats (argument) {
 		//init stats module
 		render_stats = new Stats();
@@ -93,111 +74,7 @@
 		document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
 	}
 	
-	function init_scene(){
-
-		scene = new Physijs.Scene({ fixedTimeStep: 1 / 30});
-		scene.add( camera ); //order is weird
-		//scene = Leap.loopController.plugins.boneHand.scene;
-		// setting up
-		scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
-		scene.addEventListener(
-			'update',
-			function() {
-
-				if ( selected_block !== null ) {
-					
-					_v3.copy( mouse_position ).add( block_offset ).sub( selected_block.position ).multiplyScalar( 5 );
-					_v3.y = 0;
-					selected_block.setLinearVelocity( _v3 );
-					
-					// Reactivate all of the blocks
-					_v3.set( 0, 0, 0 );
-					for ( _i = 0; _i < blocks.length; _i++ ) {
-						blocks[_i].applyCentralImpulse( _v3 );
-					}
-				}
-
-				//scene.simulate( undefined, 1 );
-				//physics_stats.update();
-			}
-			);
-		
-		
-		
-		lineGeometry = new THREE.Geometry();
-		lineGeometry.vertices.push( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -300 ) );
-
-		var line = new THREE.Line(
-			lineGeometry,
-			new THREE.LineBasicMaterial({ color: 0x0000ff })
-			);
-		scene.add(line);
-		// ambient light
-		am_light = new THREE.AmbientLight( 0x444444 );
-		scene.add( am_light );
-
-		// directional light
-		dir_light = new THREE.DirectionalLight( 0xFFFFFF );
-		dir_light.position.set( 20, 30, -5 );
-		dir_light.target.position.copy( scene.position );
-		dir_light.castShadow = true;
-		dir_light.shadowCameraLeft = -30;
-		dir_light.shadowCameraTop = -30;
-		dir_light.shadowCameraRight = 30;
-		dir_light.shadowCameraBottom = 30;
-		dir_light.shadowCameraNear = 20;
-		dir_light.shadowCameraFar = 200;
-		dir_light.shadowBias = -.001
-		dir_light.shadowMapWidth = dir_light.shadowMapHeight = 2048;
-		dir_light.shadowDarkness = .5;
-		scene.add( dir_light );
-
-		// Loader
-		loader = new THREE.TextureLoader();
-		
-		// Materials
-		table_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: loader.load( 'images/world.jpg' )}),
-			.9, // high friction
-			.2 // low restitution
-			);
-		
-		
-		block_material = Physijs.createMaterial(
-			new THREE.MeshLambertMaterial({ map: loader.load( 'images/hunna.jpg' )}),
-			0.4, // medium friction
-			.4 // medium restitution
-			);
-		
-		
-		// Table
-		table = new Physijs.BoxMesh(
-			new THREE.BoxGeometry(50, 1, 50),
-			table_material,
-			0, // mass
-			{ restitution: .2, friction: .8 }
-			);
-		table.position.y = -.5;
-		table.receiveShadow = true;
-		scene.add( table );
-		
-		createTower();
-		init_bone_meshes();
-		for (var i = 0; i < boneMeshes.length; i++) {
-			boneMeshes[i].receiveShadow = false;
-			boneMeshes[i].castShadow = true;
-			scene.add(boneMeshes[i]);
-			
-		}
-		intersect_plane = new THREE.Mesh(
-			new THREE.PlaneGeometry( 150, 150 ),
-			new THREE.MeshBasicMaterial({ opacity: 0, transparent: true })
-			);
-		intersect_plane.rotation.x = Math.PI / -2;
-		scene.add( intersect_plane );
-		requestAnimationFrame( render );
-		scene.simulate();
-	}
+	
 	init_world = function() {
 		init_renderer();
 		init_camera();

@@ -24,7 +24,7 @@ function init_bone_meshes() {
 		console.log(boneMeshes);
 }
 
-var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
+//var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
 draw_hands = function(){
 	if(currentframe == 0){
 		return 0;
@@ -40,10 +40,15 @@ draw_hands = function(){
 				
 				var bpos = new THREE.Vector3().fromArray(b.center());
 				
-				bpos.z = -1*bpos.z;
-				bpos.multiplyScalar(1/20);
-				bpos.applyEuler(camera.rotation);
-				var adjpos = bpos.add(camera.position).add(hand_offset_to_camera); //adjusts for camera position.
+				//bpos.z = -1*bpos.z;
+				//bpos.multiplyScalar(1/20);
+				
+				var adjpos = bpos;
+				//adjpos.z = -adjpos.z;
+				adjpos.divideScalar(20);
+				adjpos.applyEuler(camera.rotation);
+				adjpos.add(camera.position);
+				//var adjpos = bpos.add(camera.position).add(hand_offset_to_camera); //adjusts for camera position.
 				bmesh.__dirtyRotation = true;
 				bmesh.__dirtyPosition = true;
 				bmesh.position.set( adjpos.x, adjpos.y, adjpos.z);
@@ -66,9 +71,7 @@ function handlepinch(){
 		var a = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition).divideScalar(20);
 		var tempa = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition).divideScalar(20);
 		var b = new THREE.Vector3().fromArray(l_hand.thumb.tipPosition).divideScalar(20);
-		lineGeometry.vertices[0] = a;
-		lineGeometry.vertices[1] = b;
-		lineGeometry.verticesNeedUpdate = true;
+		
 		
 		ray = new THREE.Raycaster( a, b);
 		intersections = ray.intersectObjects( blocks );
