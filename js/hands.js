@@ -24,7 +24,7 @@ function init_bone_meshes() {
 		console.log(boneMeshes);
 }
 
-//var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
+
 draw_hands = function(){
 	if(currentframe == 0){
 		return 0;
@@ -37,23 +37,21 @@ draw_hands = function(){
 			var b = fingers[i].bones[j];
 			
 				var bmesh = boneMeshes[count];
-				
-				var bpos = new THREE.Vector3().fromArray(b.center());
-				
-				//bpos.z = -1*bpos.z;
-				//bpos.multiplyScalar(1/20);
-				
-				var adjpos = bpos;
-				//adjpos.z = -adjpos.z;
-				adjpos.divideScalar(20);
-				adjpos.applyEuler(camera.rotation);
-				adjpos.add(camera.position);
-				//var adjpos = bpos.add(camera.position).add(hand_offset_to_camera); //adjusts for camera position.
-				bmesh.__dirtyRotation = true;
-				bmesh.__dirtyPosition = true;
-				bmesh.position.set( adjpos.x, adjpos.y, adjpos.z);
-			
-
+				if(bmesh!=null){
+					var bpos = new THREE.Vector3().fromArray(b.center());
+					//bpos.z = -1*bpos.z;
+					//bpos.multiplyScalar(1/20);					
+					var adjpos = bpos;
+					//adjpos.z = -adjpos.z;
+					adjpos.divideScalar(20);
+					adjpos.applyEuler(camera.rotation);
+					adjpos.add(camera.position);
+					adjpos.add(hand_offset_to_camera);
+					//var adjpos = bpos.add(camera.position).add(hand_offset_to_camera); //adjusts for camera position.
+					bmesh.__dirtyRotation = true;
+					bmesh.__dirtyPosition = true;
+					bmesh.position.set( adjpos.x, adjpos.y, adjpos.z);
+				}
 			// You may also want to cancel the object's velocity
 			//bmesh.setLinearVelocity(new THREE.Vector3(0, 0, 0));
 			//bmesh.setAngularVelocity(new THREE.Vector3(0, 0, 0));

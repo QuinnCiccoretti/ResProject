@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="js/three.min.js"></script>
 	<script type="text/javascript" src="js/stats.js"></script>
 	<script type="text/javascript" src="js/physi.js"></script>
-	<script src="js/ImprovedNoise.js"></script>
+	<script src="js/ImprovedNoise.js"></script>s
 	<script src="js/effects/OculusRiftEffect.js"></script>
 	<script src="js/controls/FirstPersonControls.js"></script>
 	<script src="js/controls/OculusControls.js"></script>
@@ -37,7 +37,7 @@ var leapcontroller; 	// for getting leap data
 
 Physijs.scripts.worker = 'js/physijs_worker.js';
 Physijs.scripts.ammo = 'ammo.js';
-
+var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
 var test_block, draw_hands, init_world, initEventHandling, draw_test_block, currmousex, currmousey, render, createTower, loader,
 renderer, render_stats, physics_stats, scene, dir_light, am_light, camera,
 table, blocks = [], lhand, rhand,lbock,rblock,table_material, block_material, intersect_plane,
@@ -131,10 +131,32 @@ var pinching = false;
 	
 	
 	function keyPressed(event) {
-			if (event.keyCode === 74) { // J key
+			
+			if(event.keyCode === 85) {
+				//u key
+				hand_offset_to_camera.y += .25;
+			}
+			if(event.keyCode === 79) {
+				//o key
+				hand_offset_to_camera.y -= .25;
+			}if(event.keyCode === 73) {
+				//i key
+				hand_offset_to_camera.z += .25;
+			}
+			if(event.keyCode === 75) {
+				//k key
+				hand_offset_to_camera.z -= .25;
+			}
+			if(event.keyCode === 76) {
+				//i key
+				hand_offset_to_camera.x += .25;
+			}
+			if (event.keyCode === 74) { 
+				//j key
 				//$("#heading").toggle();
-				checking_collisions = !checking_collisions;
-				console.log("Checking collisions is "+checking_collisions);
+				//checking_collisions = !checking_collisions;
+				//console.log("Checking collisions is "+checking_collisions);
+				hand_offset_to_camera.x -= .25;
 			}
 		}
 		function init_all(){
