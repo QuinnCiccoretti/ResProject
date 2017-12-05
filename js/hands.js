@@ -2,10 +2,11 @@ function init_bone_meshes() {
 		console.log("----------------------");
 		for (var i = 0; i < 40; i++) {
 			var m = new Physijs.SphereMesh(
-				new THREE.SphereGeometry(0.25),
+				new THREE.SphereGeometry(0.01),
 				Physijs.createMaterial(new THREE.MeshBasicMaterial({color: 0xff0000}), 1, 1),
 				1
-				);
+				)
+			m.material.side = THREE.DoubleSide;
 			m.addEventListener( 'collision', function( other_object, relative_velocity, relative_rotation, contact_normal ) {
 				// `this` has collided with `other_object` with an impact speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
 				if(checking_collisions){
@@ -43,10 +44,11 @@ draw_hands = function(){
 					//bpos.multiplyScalar(1/20);					
 					var adjpos = bpos;
 					//adjpos.z = -adjpos.z;
-					adjpos.divideScalar(20);
-					adjpos.applyEuler(camera.rotation);
-					adjpos.add(camera.position);
-					adjpos.add(hand_offset_to_camera);
+					//adjpos.divideScalar(20);
+					//adjpos.multiplyScalar(2);
+					//adjpos.applyEuler(camera.rotation);
+					//adjpos.add(camera.position);
+					//adjpos.add(hand_offset_to_camera);
 					//var adjpos = bpos.add(camera.position).add(hand_offset_to_camera); //adjusts for camera position.
 					bmesh.__dirtyRotation = true;
 					bmesh.__dirtyPosition = true;

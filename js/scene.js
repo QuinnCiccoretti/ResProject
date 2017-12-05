@@ -1,6 +1,6 @@
 function init_renderer(){
 		//set renderer
-		renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer = new THREE.WebGLRenderer({ antialias: true, depth:true});
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.shadowMap.enabled = true;
 		renderer.shadowMapSoft = true;
@@ -13,7 +13,7 @@ function init_camera(){
 		35,
 
 		window.innerWidth / window.innerHeight,
-		1,
+		-100,
 		1000
 		);
 	camera.position.set( 10, 10, 25 );
