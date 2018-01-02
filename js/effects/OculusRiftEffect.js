@@ -171,7 +171,6 @@ THREE.OculusRiftEffect = function ( renderer, options ) {
 
 	this.render = function ( scene, camera ) {
 		var cc = renderer.getClearColor().clone();
-
 		// Clear
 		renderer.setClearColor(emptyColor);
 		renderer.clear();
