@@ -24,5 +24,6 @@ enabling collisions is now used to adjust the camera. Branch needed.
 - [ ] Stop fooling around with python simplehttp and convert everything to node. May have to re-init npm and install physijs etc.
 - [ ] update everything to sh's for portability
 - [ ] turn on the linux subsystem
-- [ ] 
+- [ ] suppress errors for unbound textures
+- [ ] Catch improperly formatted json data or figure out what causes it.
 - [x] Stay woke
