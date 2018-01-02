@@ -1,10 +1,3 @@
-#TO DO
-- [ ] Now that the oculus is open to outside sources, try the sketchy 
-plugin!
-- [ ] Part of the reason you can't pick things up is because the key for 
-enabling collisions is now used to adjust the camera. Branch needed.
-- [ ] Stay woke
-
 # Physics in Augmented Reality
 ## Quinn Ciccoretti, TJHSST
 
@@ -21,3 +14,15 @@ enabling collisions is now used to adjust the camera. Branch needed.
 - `python -m SimpleHTTPServer`
 (python 2)
 2. Use a browser to navigate to localhost:8000/index.html
+
+## TO DO
+- [ ] Now that the oculus is open to outside sources, try the sketchy 
+plugin. Only afterward do you need to switch to reactvr
+- [ ] Part of the reason you can't pick things up is because the key for 
+enabling collisions is now used to adjust the camera. Branch needed.
+- [ ] Node works, so fix heroku. You probably need to app.listen
+- [ ] Stop fooling around with python simplehttp and convert everything to node. May have to re-init npm and install physijs etc.
+- [ ] update everything to sh's for portability
+- [ ] turn on the linux subsystem
+- [ ] 
+- [x] Stay woke
