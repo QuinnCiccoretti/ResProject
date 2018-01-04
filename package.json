@@ -5,6 +5,7 @@
   "main": "serve.js",
   "dependencies": {
     "express": "^4.16.2",
+    "node": "^9.3.0",
     "npm": "^5.6.0"
   },
   "devDependencies": {},
