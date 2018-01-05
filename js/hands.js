@@ -68,9 +68,9 @@ function handlepinch(){
 	if(hands.length>0){
 		
 		var l_hand = currentframe.hands[0];
-		var a = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition).divideScalar(20);
-		var tempa = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition).divideScalar(20);
-		var b = new THREE.Vector3().fromArray(l_hand.thumb.tipPosition).divideScalar(20);
+		var a = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition);
+		var tempa = new THREE.Vector3().fromArray(l_hand.indexFinger.tipPosition);
+		var b = new THREE.Vector3().fromArray(l_hand.thumb.tipPosition);
 		
 		
 		ray = new THREE.Raycaster( a, b);

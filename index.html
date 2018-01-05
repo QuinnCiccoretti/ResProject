@@ -5,7 +5,7 @@
 <head>
 	<title>Jenga - Physijs</title>
 	
-	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+	<link rel="stylesheet" type="text/css" href="/css/styles.css" />
 	
 	<script type="text/javascript" src="js/three.min.js"></script>
 	<script type="text/javascript" src="js/stats.js"></script>
@@ -58,7 +58,7 @@ var clock = new THREE.Clock();
 var mousehasbeenmoved = false;
 var last_relv;
 var pinching = false;
-	
+var worldscale = 0.1;
 	function init_stats (argument) {
 		//init stats module
 		render_stats = new Stats();
@@ -154,9 +154,9 @@ var pinching = false;
 			if (event.keyCode === 74) { 
 				//j key
 				//$("#heading").toggle();
-				//checking_collisions = !checking_collisions;
-				//console.log("Checking collisions is "+checking_collisions);
-				hand_offset_to_camera.x -= .25;
+				checking_collisions = !checking_collisions;
+				console.log("Checking collisions is "+checking_collisions);
+				//hand_offset_to_camera.x -= .25;
 			}
 		}
 		function init_all(){
@@ -166,6 +166,7 @@ var pinching = false;
 
 			}
 			window.addEventListener("keypress", keyPressed, false);
+			window.addEventListener("resize", onWindowResize);
 			window.onload = init_all;
 		</script>
 	</head>

@@ -1,3 +1,4 @@
+var worldscale = 0.1;
 function init_renderer(){
 		//set renderer
 		renderer = new THREE.WebGLRenderer({ antialias: true, depth:true});
@@ -13,14 +14,14 @@ function init_camera(){
 		35,
 
 		window.innerWidth / window.innerHeight,
-		-100,
+		.00000001,
 		1000
 		);
-	camera.position.set( 10, 10, 25 );
-	camera.lookAt(new THREE.Vector3( 0, 7, 0 ));
+	camera.position.set( 1, 1, 2.5 );
+	camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
 }
 function init_scene(){
-
+	
 	scene = new Physijs.Scene({ fixedTimeStep: 1 / 30});
 	scene.add( camera ); //order is weird
 	//scene = Leap.loopController.plugins.boneHand.scene;
@@ -60,7 +61,7 @@ function init_scene(){
 	
 	// Table
 	table = new Physijs.BoxMesh(
-		new THREE.BoxGeometry(50, 1, 50),
+		new THREE.BoxGeometry(50*worldscale, 1, 50*worldscale),
 		table_material,
 		0, // mass
 		{ restitution: .2, friction: .8 }
@@ -77,12 +78,12 @@ function init_scene(){
 		scene.add(boneMeshes[i]);
 		
 	}
-	intersect_plane = new THREE.Mesh(
-		new THREE.PlaneGeometry( 150, 150 ),
-		new THREE.MeshBasicMaterial({ opacity: 0, transparent: true })
-		);
-	intersect_plane.rotation.x = Math.PI / -2;
-	scene.add( intersect_plane );
+	// intersect_plane = new THREE.Mesh(
+	// 	new THREE.PlaneGeometry( 150*worldscale, 150*worldscale),
+	// 	new THREE.MeshBasicMaterial({ opacity: 0, transparent: false })
+	// 	);
+	// intersect_plane.rotation.x = Math.PI / -2;
+	// scene.add( intersect_plane );
 	requestAnimationFrame( render );
 	scene.simulate();
 }
@@ -119,7 +120,7 @@ function load_materials(){
 	);
 }
 createTower = (function() {
-		var block_length = 6, block_height = 2, block_width = 0.5, block_offset = 2,
+		var block_length = 6*worldscale, block_height = 2*worldscale, block_width = 0.5*worldscale, block_offset = 2*worldscale,
 		block_geometry = new THREE.BoxGeometry( block_length, block_height, block_width );
 		
 		return function() {
