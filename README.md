@@ -20,8 +20,8 @@
 plugin. Only afterward do you need to switch to reactvr
 - [ ] Part of the reason you can't pick things up is because the key for 
 enabling collisions is now used to adjust the camera. Branch needed.
-- [ ] Node works, so fix heroku. You probably need to app.listen
-- [ ] Stop fooling around with python simplehttp and convert everything to node. May have to re-init npm and install physijs etc.
+- [x] Node works, so fix heroku. You probably need to app.listen
+- [x] Stop fooling around with python simplehttp and convert everything to node. May have to re-init npm and install physijs etc.
 - [ ] update everything to sh's for portability
 - [ ] turn on the linux subsystem
 - [ ] suppress errors for unbound textures
