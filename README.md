@@ -27,4 +27,5 @@ enabling collisions is now used to adjust the camera. Branch needed.
 - [ ] turn on the linux subsystem
 - [ ] suppress errors for unbound textures
 - [ ] Catch improperly formatted json data or figure out what causes it.
+- [ ] Use the 360deg camera to get a nice video to put into threejs.
 - [x] Stay woke
