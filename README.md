@@ -8,7 +8,7 @@
 - Oculus Rift, including position sensor
 - Leap Motion hand sensor
 ### How to run:
-- (Live demo at https://vrscape.herokuapp.com)
+- (Live demo of master at https://vrscape.herokuapp.com)
 1. Physijs requires worker threads to be hosted separately, so cd to the directory containing index.html and run 
 - `python -m http.server`
 (python 3)
