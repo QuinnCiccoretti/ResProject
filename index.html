@@ -1,182 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <style>
+      html{
+        background-color: black;
+      }
+      body {
+        background-image: url("/images/back.jpg");
+        background-color: black;
+      }
+      #maincenter {
+        min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+        min-height: 100vh; /* These two lines are counted as one :-)       */
+        color: white;
+        display: flex;
+        align-items: center;
+      }
+      #startvr{
+        /*background-color: white;*/
+      }
+      .h1{
+        height:100%;
+        width:100%;
+      }
+      .button {
+        -webkit-transition-duration: 0.4s; /* Safari */
+        transition-duration: 0.4s;
+      }
 
-<html>
-
-<head>
-	<title>Jenga - Physijs</title>
-	
-	<link rel="stylesheet" type="text/css" href="/css/styles.css" />
-	
-	<script type="text/javascript" src="js/three.min.js"></script>
-	<script type="text/javascript" src="js/stats.js"></script>
-	<script type="text/javascript" src="js/physi.js"></script>
-	<script src="js/ImprovedNoise.js"></script>s
-	<script src="js/effects/OculusRiftEffect.js"></script>
-	<script src="js/controls/FirstPersonControls.js"></script>
-	<script src="js/controls/OculusControls.js"></script>
-	
-	<script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
-	<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>
-	<script
-	src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-	integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
-	crossorigin="anonymous">
-</script>
-<!-- Custom code -->
-<script src ="js/leap.js"></script>
-<script src ="js/effect.js"></script>
-<script src ="js/hands.js"></script>
-<script src ="js/scene.js"></script>
-<!--/Custom code -->
-<!-- <script type="text/javascript" src="js/engine.js"></script> -->
-<script type="text/javascript">
-
-var currentframe = 0; //most recent leap data
-var leapcontroller; 	// for getting leap data
-'use strict';
-
-Physijs.scripts.worker = 'js/physijs_worker.js';
-Physijs.scripts.ammo = 'ammo.js';
-var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
-var test_block, draw_hands, init_world, initEventHandling, draw_test_block, currmousex, currmousey, render, createTower, loader,
-renderer, render_stats, physics_stats, scene, dir_light, am_light, camera,
-table, blocks = [], lhand, rhand,lbock,rblock,table_material, block_material, intersect_plane,
-selected_block = null, mouse_position = new THREE.Vector3, block_offset = new THREE.Vector3, _i, _v3 = new THREE.Vector3;
-var touched_block;
-var lastfingertippos;
-// var boneboxes = [];
-var boneMeshes = [];
-var oldpos;
-var lineGeometry;
- //    var jointMeshes = [];
-var checking_collisions = false;
-//from effect demo
-var realcamera;
-var guiVisible = true;
-var mesh, effect, controls, oculuscontrol;
-var clock = new THREE.Clock();
-var mousehasbeenmoved = false;
-var last_relv;
-var pinching = false;
-var worldscale = 0.1;
-	function init_stats (argument) {
-		//init stats module
-		render_stats = new Stats();
-		render_stats.domElement.style.position = 'absolute';
-		render_stats.domElement.style.top = '1px';
-		render_stats.domElement.style.zIndex = 100;
-		document.getElementById( 'viewport' ).appendChild( render_stats.domElement );
-		//init stats module
-		physics_stats = new Stats();
-		physics_stats.domElement.style.position = 'absolute';
-		physics_stats.domElement.style.top = '50px';
-		physics_stats.domElement.style.zIndex = 100;
-		document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
-	}
-	
-	
-	init_world = function() {
-		init_renderer();
-		init_camera();
-		init_effect();
-		init_stats();
-		init_scene();
-		window.addEventListener( 'resize', onWindowResize, false );
-		document.addEventListener('keydown', keyPressed, false);
-		//oculuscontrol.connect();//presumably engages oculus tracking REQUIRES SERVER THAT IS NOT INSTALLED
-		//initEventHandling();
-		
-	};
-	//from the effect demo
-	function onWindowResize() {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		// realcamera.aspect = window.innerWidth / window.innerHeight;
-		//realcamera.updateProjectionMatrix();
-		effect.setSize( window.innerWidth, window.innerHeight );
-		controls.handleResize();
-	}
-	
-	var _vector = new THREE.Vector3,
-	handleMouseDown, handleMouseMove, handleMouseUp;
-	function calcvelocity(pos1, pos2, t){
-		return pos2.sub(pos1).divideScalar(t);
-	}
-	var lastpinching = false;
-
-
-
-
-	
-	render = function() {
-		if(currentframe !=0){
-			draw_hands();
-			handlepinch();
-		}
-		//draw_test_block();
-		requestAnimationFrame( render );
-		//renderer.render( scene, camera );
-		//effect
-		//var t = clock.getElapsedTime();
-		controls.update( clock.getDelta() );		//Necessary for movement
-		//oculuscontrol.update( clock.getDelta() );	//Necessary for movement
-		effect.render( scene, camera );
-		renderer.render( scene, camera );
-		scene.simulate( undefined, 1 );
-		render_stats.update();
-	};
-	
-	
-	
-	
-	
-	function keyPressed(event) {
-			
-			if(event.keyCode === 85) {
-				//u key
-				hand_offset_to_camera.y += .25;
-			}
-			if(event.keyCode === 79) {
-				//o key
-				hand_offset_to_camera.y -= .25;
-			}if(event.keyCode === 73) {
-				//i key
-				hand_offset_to_camera.z += .25;
-			}
-			if(event.keyCode === 75) {
-				//k key
-				hand_offset_to_camera.z -= .25;
-			}
-			if(event.keyCode === 76) {
-				//i key
-				hand_offset_to_camera.x += .25;
-			}
-			if (event.keyCode === 74) { 
-				//j key
-				//$("#heading").toggle();
-				checking_collisions = !checking_collisions;
-				console.log("Checking collisions is "+checking_collisions);
-				//hand_offset_to_camera.x -= .25;
-			}
-		}
-		function init_all(){
-				// init_vars();
-				init_world();
-				init_leap(); 
-
-			}
-			window.addEventListener("keypress", keyPressed, false);
-			window.addEventListener("resize", onWindowResize);
-			window.onload = init_all;
-		</script>
-	</head>
-
-	<body>
-	<!-- <div id="heading">
-		<h1>Jenga</h1>
-		<p>Click & drag on the blocks to move them around.</p>
-	</div> -->
-	<div id="viewport"></div>
-</body>
-
+      .button:hover {
+        background-color: #4CAF50; /* Green */
+        color: white;
+      }
+    </style>
+    <title>Vrdent</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      window.onload = function(){
+        $("#maincenter").fadeOut(1, function(){
+          $("#maincenter").fadeIn("slow");
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id = "maincenter" class="row text-center">
+      <div class="col-sm-4">
+        <h1>VR Physics</h1></h2>A Quinn Ciccoretti Project</h2>
+      </div>
+      <div class="col-sm-4">
+        <a href = "./index.html">
+          <div class="thumbnail">
+            <img class = "img-thumbnail" src="images/play.png" alt="Start VR">
+            <h2><strong>Start VR</strong></h2>
+          </div>
+        </a>
+      </div>
+      <div class="col-sm-4" >
+        <a href ="https://github.com/QuinnCiccoretti/ResProject">
+          <div class="thumbnail">
+            <img class = "img-thumbnail" src="images/git-icon.jpeg" alt="Github">
+            <h2><strong>Github</strong></h2>
+          </div>
+        </a>
+      </div>
+    </div>
+  </body>
 </html>
