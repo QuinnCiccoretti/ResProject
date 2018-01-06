@@ -5,7 +5,7 @@
 <head>
 	<title>VR Physics</title>
 	<!-- Displays before rest of page -->
-	Loading...
+	
 	<link rel="stylesheet" type="text/css" href="/css/styles.css" />
 	<link rel="icon" href="/images/snoop.gif" type="image/gif" sizes="16x16">
 	<script type="text/javascript" src="js/three.min.js"></script>
@@ -21,116 +21,105 @@
 	src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
 	crossorigin="anonymous">
-</script>
-<!-- Custom code -->
-<script src ="js/leap.js"></script>
-<script src ="js/effect.js"></script>
-<script src ="js/hands.js"></script>
-<script src ="js/scene.js"></script>
-<!--/Custom code -->
-<!-- <script type="text/javascript" src="js/engine.js"></script> -->
-<script type="text/javascript">
+	</script>
+	<!-- Custom code -->
+	<script src ="js/leap.js"></script>
+	<script src ="js/effect.js"></script>
+	<script src ="js/hands.js"></script>
+	<script src ="js/scene.js"></script>
+	<!--/Custom code -->
+	<!-- <script type="text/javascript" src="js/engine.js"></script> -->
+	<script type="text/javascript">
+		var currentframe = 0; //most recent leap data
+		var leapcontroller; 	// for getting leap data
+		'use strict';
 
-var currentframe = 0; //most recent leap data
-var leapcontroller; 	// for getting leap data
-'use strict';
-
-Physijs.scripts.worker = 'js/physijs_worker.js';
-Physijs.scripts.ammo = 'ammo.js';
-var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
-var test_block, draw_hands, init_world, initEventHandling, draw_test_block, currmousex, currmousey, render, createTower, loader,
-renderer, render_stats, physics_stats, scene, dir_light, am_light, camera,
-table, blocks = [], lhand, rhand,lbock,rblock,table_material, block_material, intersect_plane,
-selected_block = null, mouse_position = new THREE.Vector3, block_offset = new THREE.Vector3, _i, _v3 = new THREE.Vector3;
-var touched_block;
-var lastfingertippos;
-// var boneboxes = [];
-var boneMeshes = [];
-var oldpos;
-var lineGeometry;
- //    var jointMeshes = [];
-var checking_collisions = false;
-//from effect demo
-var realcamera;
-var guiVisible = true;
-var mesh, effect, controls, oculuscontrol;
-var clock = new THREE.Clock();
-var mousehasbeenmoved = false;
-var last_relv;
-var pinching = false;
-var worldscale = 0.1;
-	function init_stats (argument) {
-		//init stats module
-		render_stats = new Stats();
-		render_stats.domElement.style.position = 'absolute';
-		render_stats.domElement.style.top = '1px';
-		render_stats.domElement.style.zIndex = 100;
-		document.getElementById( 'viewport' ).appendChild( render_stats.domElement );
-		//init stats module
-		physics_stats = new Stats();
-		physics_stats.domElement.style.position = 'absolute';
-		physics_stats.domElement.style.top = '50px';
-		physics_stats.domElement.style.zIndex = 100;
-		document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
-	}
-	
-	
-	init_world = function() {
-		init_renderer();
-		init_camera();
-		init_effect();
-		init_stats();
-		init_scene();
-		window.addEventListener( 'resize', onWindowResize, false );
-		document.addEventListener('keydown', keyPressed, false);
-		//oculuscontrol.connect();//presumably engages oculus tracking REQUIRES SERVER THAT IS NOT INSTALLED
-		//initEventHandling();
-		
-	};
-	//from the effect demo
-	function onWindowResize() {
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		// realcamera.aspect = window.innerWidth / window.innerHeight;
-		//realcamera.updateProjectionMatrix();
-		effect.setSize( window.innerWidth, window.innerHeight );
-		controls.handleResize();
-	}
-	
-	var _vector = new THREE.Vector3,
-	handleMouseDown, handleMouseMove, handleMouseUp;
-	function calcvelocity(pos1, pos2, t){
-		return pos2.sub(pos1).divideScalar(t);
-	}
-	var lastpinching = false;
-
-
-
-
-	
-	render = function() {
-		if(currentframe !=0){
-			draw_hands();
-			handlepinch();
+		Physijs.scripts.worker = 'js/physijs_worker.js';
+		Physijs.scripts.ammo = 'ammo.js';
+		var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
+		var test_block, draw_hands, init_world, initEventHandling, draw_test_block, currmousex, currmousey, render, createTower, loader,
+		renderer, render_stats, physics_stats, scene, dir_light, am_light, camera,
+		table, blocks = [], lhand, rhand,lbock,rblock,table_material, block_material, intersect_plane,
+		selected_block = null, mouse_position = new THREE.Vector3, block_offset = new THREE.Vector3, _i, _v3 = new THREE.Vector3;
+		var touched_block;
+		var lastfingertippos;
+		// var boneboxes = [];
+		var boneMeshes = [];
+		var oldpos;
+		var lineGeometry;
+		 //    var jointMeshes = [];
+		var checking_collisions = false;
+		//from effect demo
+		var realcamera;
+		var guiVisible = true;
+		var mesh, effect, controls, oculuscontrol;
+		var clock = new THREE.Clock();
+		var mousehasbeenmoved = false;
+		var last_relv;
+		var pinching = false;
+		var worldscale = 0.1;
+		function init_stats (argument) {
+			//init stats module
+			render_stats = new Stats();
+			render_stats.domElement.style.position = 'absolute';
+			render_stats.domElement.style.top = '1px';
+			render_stats.domElement.style.zIndex = 100;
+			document.getElementById( 'viewport' ).appendChild( render_stats.domElement );
+			//init stats module
+			physics_stats = new Stats();
+			physics_stats.domElement.style.position = 'absolute';
+			physics_stats.domElement.style.top = '50px';
+			physics_stats.domElement.style.zIndex = 100;
+			document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
 		}
-		//draw_test_block();
-		requestAnimationFrame( render );
-		//renderer.render( scene, camera );
-		//effect
-		//var t = clock.getElapsedTime();
-		controls.update( clock.getDelta() );		//Necessary for movement
-		//oculuscontrol.update( clock.getDelta() );	//Necessary for movement
-		effect.render( scene, camera );
-		renderer.render( scene, camera );
-		scene.simulate( undefined, 1 );
-		render_stats.update();
-	};
-	
-	
-	
-	
-	
-	function keyPressed(event) {
+		
+		
+		init_world = function() {
+			init_renderer();
+			init_camera();
+			init_effect();
+			init_stats();
+			init_scene();
+			window.addEventListener( 'resize', onWindowResize, false );
+			document.addEventListener('keydown', keyPressed, false);
+			//oculuscontrol.connect();//presumably engages oculus tracking REQUIRES SERVER THAT IS NOT INSTALLED
+			//initEventHandling();
+			
+		};
+		//from the effect demo
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			// realcamera.aspect = window.innerWidth / window.innerHeight;
+			//realcamera.updateProjectionMatrix();
+			effect.setSize( window.innerWidth, window.innerHeight );
+			controls.handleResize();
+		}
+		
+		var _vector = new THREE.Vector3,
+		handleMouseDown, handleMouseMove, handleMouseUp;
+		function calcvelocity(pos1, pos2, t){
+			return pos2.sub(pos1).divideScalar(t);
+		}
+		var lastpinching = false;		
+		render = function() {
+			if(currentframe !=0){
+				draw_hands();
+				handlepinch();
+			}
+			//draw_test_block();
+			requestAnimationFrame( render );
+			//renderer.render( scene, camera );
+			//effect
+			//var t = clock.getElapsedTime();
+			controls.update( clock.getDelta() );		//Necessary for movement
+			//oculuscontrol.update( clock.getDelta() );	//Necessary for movement
+			effect.render( scene, camera );
+			renderer.render( scene, camera );
+			scene.simulate( undefined, 1 );
+			render_stats.update();
+		};
+		function keyPressed(event) {
 			
 			if(event.keyCode === 85) {
 				//u key
@@ -161,17 +150,48 @@ var worldscale = 0.1;
 		}
 		function init_all(){
 				// init_vars();
+				$(".load").hide();
 				init_world();
 				init_leap(); 
 
 			}
-			window.addEventListener("keypress", keyPressed, false);
-			window.addEventListener("resize", onWindowResize);
-			window.onload = init_all;
-		</script>
-	</head>
+		window.addEventListener("keypress", keyPressed, false);
+		window.addEventListener("resize", onWindowResize);
+		window.onload = init_all;
+	</script>
+	<style type="text/css">
+	/*Magic for making loader work*/
+		.load{
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			z-index: 1;
+		}
+		#loader {
+			width: 150px;
+			height: 150px;
+			margin: -75px 0 0 -75px;
+			border: 16px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 16px solid #ff00e9;
+			width: 120px;
+			height: 120px;
+			-webkit-animation: spin 2s linear infinite;
+			animation: spin .5s linear infinite;
+		}
+		@-webkit-keyframes spin {
+			0% { -webkit-transform: rotate(0deg); }
+			100% { -webkit-transform: rotate(360deg); }
+		}
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+	</style>
+</head>
 
 	<body>
+	<div class="load" id="loader"></div>
 	<!-- <div id="heading">
 		<h1>Jenga</h1>
 		<p>Click & drag on the blocks to move them around.</p>
