@@ -1,5 +1,5 @@
 function init_leap() {
-		console.log("Initialized Leap");
+		
 		leapcontroller = new Leap.Controller({
 			enableGestures: true,
 			optimizeHMD:true}
@@ -25,6 +25,6 @@ function init_leap() {
 			
 		})
 		
-
+		console.log("Initialized Leap");
 
 	}
