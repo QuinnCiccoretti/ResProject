@@ -9,11 +9,10 @@
 - Leap Motion hand sensor
 ### How to run:
 - (Live demo of master at https://vrscape.herokuapp.com)
-1. Physijs requires worker threads to be hosted separately, so cd to the directory containing index.html and run 
-- `python -m http.server`
-(python 3)
-- `python -m SimpleHTTPServer`
-(python 2)
+1. Start a node server locally
+   1. Ensure that node is installed properly with `node -v`
+   2. Run `npm install`
+   3. Run `node serve.js`
 2. Use a browser to navigate to localhost:8000/index.html
 
 ## TO DO
