@@ -16,15 +16,11 @@
    4. Run `node serve.js`
 2. Use a browser to navigate to http://localhost:5000
 ## TO DO
-- [ ] Now that the oculus is open to outside sources, try the sketchy 
-plugin. Only afterward do you need to switch to reactvr
+- [ ] As it turns out, vr.js has no SDK2 support so you will need to use webvr. Branch needed
 - [ ] Part of the reason you can't pick things up is because the key for 
 enabling collisions is now used to adjust the camera. Branch needed.
-- [x] Node works, so fix heroku. You probably need to app.listen
-- [x] Stop fooling around with python simplehttp and convert everything to node. May have to re-init npm and install physijs etc.
 - [ ] update everything to sh's for portability
-- [ ] turn on the linux subsystem
 - [ ] suppress errors for unbound textures
 - [ ] Catch improperly formatted json data or figure out what causes it.
-- [ ] Use the 360deg camera to get a nice video to put into threejs.
+- [ ] Use the 360deg camera to get a nice video to put into threejs. Maybe take pictures and stagger it a bit so it is almost augmented. Branch needed
 - [x] Stay woke
