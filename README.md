@@ -8,12 +8,13 @@
 - Oculus Rift, including position sensor
 - Leap Motion hand sensor
 ### How to run:
-- (Live demo of master at https://vrscape.herokuapp.com)
+(Try the live demo of master at https://vrscape.herokuapp.com)
 1. Start a node server locally
    1. Ensure that node is installed properly with `node -v`
-   2. Run `npm install`
-   3. Run `node serve.js`
-2. Use a browser to navigate to localhost:8000/index.html
+   2. Ensure that npm is installed properly with `npm -v`
+   3. Run `npm install`
+   4. Run `node serve.js`
+2. Use a browser to navigate to localhost:8000
 
 ## TO DO
 - [ ] Now that the oculus is open to outside sources, try the sketchy 
