@@ -14,8 +14,7 @@
    2. Ensure that npm is installed properly with `npm -v`
    3. Run `npm install`
    4. Run `node serve.js`
-2. Use a browser to navigate to [localhost:5000](localhost:5000)
-
+2. Use a browser to navigate to http://localhost:5000
 ## TO DO
 - [ ] Now that the oculus is open to outside sources, try the sketchy 
 plugin. Only afterward do you need to switch to reactvr
