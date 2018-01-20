@@ -4,6 +4,11 @@
 #### Hardware
 - Oculus Rift, including position sensor
 - Leap Motion hand sensor
+
+#### Software
+- [Leap Motion SDK](https://developer.leapmotion.com/get-started/)
+
+
 ### How to run:
 (Try the live demo of master at https://vrscape.herokuapp.com)
 1. Start a node server locally
@@ -12,6 +17,7 @@
    3. Run `npm install`
    4. Run `node serve.js`
 2. Use a browser to navigate to http://localhost:5000
+
 ## TO DO
 - [ ] As it turns out, vr.js has no SDK2 support so you will need to use webvr. Branch needed
 - [ ] Part of the reason you can't pick things up is because the key for 
