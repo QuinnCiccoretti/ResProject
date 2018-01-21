@@ -26,7 +26,7 @@ function init_scene(){
 	
 	scene = new Physijs.Scene({ fixedTimeStep: 1 / 30});
 	scene.add( camera ); //order is weird
-	//scene = Leap.loopController.plugins.boneHand.scene;
+	
 	// setting up
 	scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
 	scene.addEventListener(
@@ -44,18 +44,17 @@ function init_scene(){
 	//Setup materials
 	load_materials();
 	
-	
 	// Table
 	table = new Physijs.BoxMesh(
 		new THREE.BoxGeometry(50*worldscale, 1, 50*worldscale),
 		table_material,
 		0, // mass
-		{ restitution: .2, friction: .8 }
+		{ restitution: 0, friction: 1 }
 		);
-	table.position.y = -.5;
+	table.position.y = -.6;
 	table.receiveShadow = true;
 	scene.add( table );
-	
+
 	createTower();
 	init_bone_meshes();
 	for (var i = 0; i < boneMeshes.length; i++) {
@@ -64,12 +63,6 @@ function init_scene(){
 		scene.add(boneMeshes[i]);
 		
 	}
-	// intersect_plane = new THREE.Mesh(
-	// 	new THREE.PlaneGeometry( 150*worldscale, 150*worldscale),
-	// 	new THREE.MeshBasicMaterial({ opacity: 0, transparent: false })
-	// 	);
-	// intersect_plane.rotation.x = Math.PI / -2;
-	// scene.add( intersect_plane );
 	requestAnimationFrame( render );
 	scene.simulate();
 }
@@ -124,8 +117,8 @@ createTower = (function() {
 					else {
 						block.position.z = block_offset * j - ( block_offset * 3 / 2 - block_offset / 2 );
 					}
-					//block.receiveShadow = true;
-					//block.castShadow = true;
+					block.receiveShadow = true;
+					block.castShadow = true;
 					scene.add( block );
 					blocks.push( block );
 				}
