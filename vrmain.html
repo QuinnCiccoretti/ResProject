@@ -7,7 +7,7 @@
 	<!-- Displays before rest of page -->
 	
 	<link rel="stylesheet" type="text/css" href="/css/styles.css" />
-	<link rel="icon" href="/images/snoop.gif" type="image/gif" sizes="16x16">
+	<link rel="icon" href="/images/hunna.jpg" type="image/jpeg" sizes="16x16">
 	<script type="text/javascript" src="js/three.min.js"></script>
 	<script type="text/javascript" src="js/stats.js"></script>
 	<script type="text/javascript" src="js/physi.js"></script>
@@ -29,7 +29,6 @@
 	</script>
 	<!-- Custom code -->
 	<script src ="js/leap.js"></script>
-	<script src ="js/effect.js"></script>
 	<script src ="js/hands.js"></script>
 	<script src ="js/scene.js"></script>
 	<!--/Custom code -->
@@ -81,10 +80,11 @@
 		
 		init_world = function() {
 			init_renderer();
-			init_camera();
+			
 			// init_effect();
 			init_stats();
 			init_scene();
+			init_user();
 			window.addEventListener( 'resize', onWindowResize, false );
 			document.addEventListener('keydown', keyPressed, false);
 			//oculuscontrol.connect();//presumably engages oculus tracking REQUIRES SERVER THAT IS NOT INSTALLED
@@ -95,31 +95,16 @@
 		function onWindowResize() {
 			camera.aspect = window.innerWidth / window.innerHeight;
 			camera.updateProjectionMatrix();
-			// realcamera.aspect = window.innerWidth / window.innerHeight;
-			//realcamera.updateProjectionMatrix();
-			// effect.setSize( window.innerWidth, window.innerHeight );
-			// controls.handleResize();
 		}
 		
-		var _vector = new THREE.Vector3,
-		handleMouseDown, handleMouseMove, handleMouseUp;
-		function calcvelocity(pos1, pos2, t){
-			return pos2.sub(pos1).divideScalar(t);
-		}
+		
 		var lastpinching = false;		
 		render = function() {
 			if(currentframe !=0){
 				draw_hands();
 				handlepinch();
 			}
-			//draw_test_block();
 			requestAnimationFrame( render );
-			//renderer.render( scene, camera );
-			//effect
-			//var t = clock.getElapsedTime();
-			// controls.update( clock.getDelta() );		//Necessary for movement
-			//oculuscontrol.update( clock.getDelta() );	//Necessary for movement
-			// effect.render( scene, camera );
 			renderer.render( scene, camera );
 			scene.simulate( undefined, 1 );
 			render_stats.update();

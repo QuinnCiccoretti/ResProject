@@ -6,26 +6,47 @@ function init_renderer(){
 		renderer.shadowMap.enabled = true;
 		renderer.shadowMapSoft = true;
 		renderer.setClearColor (0xffffff, 1);
-		// renderer.vr.enabled = true;
+		// renderer.vr.enabled = true;	//for some reason bricks everything
 		document.getElementById( 'viewport' ).appendChild( renderer.domElement );
-		document.body.appendChild(WEBVR.createButton( renderer ) );
+		//create view in VR button
+		document.body.appendChild(WEBVR.createButton( renderer ) );	
 }
-function init_camera(){
-	//Init camera ////////////////////
-	camera = new THREE.PerspectiveCamera(
-		35,
+function init_user(){
+	//Init user group
+	var user = new THREE.Group();
+	user.position.set( 0, 1.6, 0 );
+	scene.add( user );
+	// Cam
+	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10 );
+	user.add( camera );
+	// VIVE controllers
+	controller1 = new THREE.ViveController( 0 );
+	user.add( controller1 );
 
-		window.innerWidth / window.innerHeight,
-		.00000001,
-		1000
-		);
-	camera.position.set( 1, 1, 2.5 );
-	camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
+	controller2 = new THREE.ViveController( 1 );
+	user.add( controller2 );
+
+	var loader = new THREE.OBJLoader();
+	loader.setPath( 'models/obj/vive-controller/' );
+	loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
+
+		var loader = new THREE.TextureLoader();
+		loader.setPath( 'models/obj/vive-controller/' );
+
+		var controller = object.children[ 0 ];
+		controller.material.map = loader.load( 'onepointfive_texture.png' );
+		controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+
+		controller1.add( object.clone() );
+		controller2.add( object.clone() );
+
+	} );
+
 }
 function init_scene(){
 	
 	scene = new Physijs.Scene({ fixedTimeStep: 1 / 30});
-	scene.add( camera ); //order is weird
+	
 	
 	// setting up
 	scene.setGravity(new THREE.Vector3( 0, -30, 0 ));

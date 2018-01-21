@@ -19,6 +19,7 @@
 2. Use a browser to navigate to http://localhost:5000
 
 ## TO DO
+- [ ] Since you no longer need the oculus effect, you can switch to the most recent threejs build. And you might have to in order to renderer.vr.enabled =true
 - [ ] As it turns out, vr.js has no SDK2 support so you will need to use webvr. Branch needed
 - [ ] Part of the reason you can't pick things up is because the key for 
 enabling collisions is now used to adjust the camera. Branch needed.
