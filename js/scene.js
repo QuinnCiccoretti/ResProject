@@ -14,7 +14,7 @@ function init_renderer(){
 function init_user(){
 	//Init user group
 	var user = new THREE.Group();
-	user.position.set( 0, 1.6, 0 );
+	user.position.set( 0, 2, 7 );
 	scene.add( user );
 	// Cam
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.1, 10 );
@@ -25,22 +25,24 @@ function init_user(){
 
 	controller2 = new THREE.ViveController( 1 );
 	user.add( controller2 );
+	/////////////////////////////////////////////
+	//				Vive Controller			   //
+	/////////////////////////////////////////////
+	// var loader = new THREE.OBJLoader();
+	// loader.setPath( 'models/obj/vive-controller/' );
+	// loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
 
-	var loader = new THREE.OBJLoader();
-	loader.setPath( 'models/obj/vive-controller/' );
-	loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
+	// 	var loader = new THREE.TextureLoader();
+	// 	loader.setPath( 'models/obj/vive-controller/' );
 
-		var loader = new THREE.TextureLoader();
-		loader.setPath( 'models/obj/vive-controller/' );
+	// 	var controller = object.children[ 0 ];
+	// 	controller.material.map = loader.load( 'onepointfive_texture.png' );
+	// 	controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
 
-		var controller = object.children[ 0 ];
-		controller.material.map = loader.load( 'onepointfive_texture.png' );
-		controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+	// 	controller1.add( object.clone() );
+	// 	controller2.add( object.clone() );
 
-		controller1.add( object.clone() );
-		controller2.add( object.clone() );
-
-	} );
+	// } );
 
 }
 function init_scene(){

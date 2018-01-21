@@ -4,35 +4,38 @@
 
 <head>
 	<title>VR Physics</title>
-	<!-- Displays before rest of page -->
-	
-	<link rel="stylesheet" type="text/css" href="/css/styles.css" />
+	<!-- Favicon -->
 	<link rel="icon" href="/images/hunna.jpg" type="image/jpeg" sizes="16x16">
+
+	<!-- Styling -->
+	<link rel="stylesheet" type="text/css" href="/css/styles.css" />
+	
 	<script type="text/javascript" src="js/three.min.js"></script>
 	<script type="text/javascript" src="js/stats.js"></script>
 	<script type="text/javascript" src="js/physi.js"></script>
-	<!-- <script src="js/effects/OculusRiftEffect.js"></script> -->
-	<!-- <script src="js/controls/FirstPersonControls.js"></script>
-	<script src="js/controls/OculusControls.js"></script> -->
+	
 	<!-- Leap -->
 	<script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
 	<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>
+
 	<!-- Webvr -->
 	<script src="js/vr/ViveController.js"></script>
 	<script src="js/vr/WebVR.js"></script>
 	<script src="js/loaders/OBJLoader.js"></script>
+
 	<!-- JQuery -->
 	<script
 	src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
 	crossorigin="anonymous">
 	</script>
+
 	<!-- Custom code -->
 	<script src ="js/leap.js"></script>
 	<script src ="js/hands.js"></script>
 	<script src ="js/scene.js"></script>
-	<!--/Custom code -->
-	<!-- <script type="text/javascript" src="js/engine.js"></script> -->
+
+	<!-- Engine -->
 	<script type="text/javascript">
 		var currentframe = 0; //most recent leap data
 		var leapcontroller; 	// for getting leap data
@@ -40,6 +43,9 @@
 
 		Physijs.scripts.worker = 'js/physijs_worker.js';
 		Physijs.scripts.ammo = 'ammo.js';
+		/////////////////////////////////////////////
+		//				Init Variables			   //
+		/////////////////////////////////////////////
 		var hand_offset_to_camera = new THREE.Vector3(0,-7,0);
 		var test_block, draw_hands, init_world, initEventHandling, draw_test_block, currmousex, currmousey, render, createTower, loader,
 		renderer, render_stats, physics_stats, scene, dir_light, am_light, camera,
@@ -47,21 +53,14 @@
 		selected_block = null, mouse_position = new THREE.Vector3, block_offset = new THREE.Vector3, _i, _v3 = new THREE.Vector3;
 		var touched_block;
 		var lastfingertippos;
-		// var boneboxes = [];
 		var boneMeshes = [];
 		var oldpos;
-		var lineGeometry;
-		 //    var jointMeshes = [];
 		var checking_collisions = false;
-		//from effect demo
-		var realcamera;
-		var guiVisible = true;
 		var mesh;
 		var clock = new THREE.Clock();
-		var mousehasbeenmoved = false;
-		var last_relv;
+		
 		var pinching = false;
-		var worldscale = 0.1;
+		var worldscale = 1;
 		function init_stats (argument) {
 			//init stats module
 			render_stats = new Stats();
@@ -70,11 +69,11 @@
 			render_stats.domElement.style.zIndex = 100;
 			document.getElementById( 'viewport' ).appendChild( render_stats.domElement );
 			//init stats module
-			physics_stats = new Stats();
-			physics_stats.domElement.style.position = 'absolute';
-			physics_stats.domElement.style.top = '50px';
-			physics_stats.domElement.style.zIndex = 100;
-			document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
+			// physics_stats = new Stats();
+			// physics_stats.domElement.style.position = 'absolute';
+			// physics_stats.domElement.style.top = '50px';
+			// physics_stats.domElement.style.zIndex = 100;
+			// document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
 		}
 		
 		
@@ -140,14 +139,12 @@
 		}
 		function init_all(){
 				// init_vars();
-				
-
 				var info = document.createElement( 'div' );
 				info.style.position = 'absolute';
 				info.style.top = '10px';
 				info.style.width = '100%';
 				info.style.textAlign = 'center';
-				info.innerHTML = '<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> htc vive webvr';
+				info.innerHTML = '<a href = "https://github.com/QuinnCiccoretti/ResProject">htc vive + webvr + physijs</a>';
 				document.getElementById( 'viewport' ).appendChild( info );
 				$(".load").hide();
 				init_world();
@@ -158,35 +155,7 @@
 		window.addEventListener("resize", onWindowResize);
 		window.onload = init_all;
 	</script>
-	<style type="text/css">
-	/*Magic for making loader work*/
-		.load{
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			z-index: 1;
-		}
-		#loader {
-			width: 150px;
-			height: 150px;
-			margin: -75px 0 0 -75px;
-			border: 16px solid #f3f3f3;
-			border-radius: 50%;
-			border-top: 16px solid #ff00e9;
-			width: 120px;
-			height: 120px;
-			-webkit-animation: spin 2s linear infinite;
-			animation: spin .5s linear infinite;
-		}
-		@-webkit-keyframes spin {
-			0% { -webkit-transform: rotate(0deg); }
-			100% { -webkit-transform: rotate(360deg); }
-		}
-		@keyframes spin {
-			0% { transform: rotate(0deg); }
-			100% { transform: rotate(360deg); }
-		}
-	</style>
+	
 </head>
 
 	<body>

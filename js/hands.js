@@ -1,5 +1,4 @@
 function init_bone_meshes() {
-		console.log("----------------------");
 		for (var i = 0; i < 40; i++) {
 			var m = new Physijs.SphereMesh(
 				new THREE.SphereGeometry(0.01),
@@ -12,9 +11,7 @@ function init_bone_meshes() {
 				if(checking_collisions){
 					if(other_object.geometry.type != "SphereGeometry"){
 						touched_block = other_object;
-						//console.log("collided! with other:");
-						//console.log(other_object);
-						//last_relv = relative_velocity;
+						
 					}
 				}
 				
@@ -39,24 +36,12 @@ draw_hands = function(){
 			
 				var bmesh = boneMeshes[count];
 				if(bmesh!=null){
-					var bpos = new THREE.Vector3().fromArray(b.center());
-					//bpos.z = -1*bpos.z;
-					//bpos.multiplyScalar(1/20);					
+					var bpos = new THREE.Vector3().fromArray(b.center());			
 					var adjpos = bpos;
-					//adjpos.z = -adjpos.z;
-					//adjpos.divideScalar(20);
-					//adjpos.multiplyScalar(2);
-					//adjpos.applyEuler(camera.rotation);
-					//adjpos.add(camera.position);
-					//adjpos.add(hand_offset_to_camera);
-					//var adjpos = bpos.add(camera.position).add(hand_offset_to_camera); //adjusts for camera position.
 					bmesh.__dirtyRotation = true;
 					bmesh.__dirtyPosition = true;
 					bmesh.position.set( adjpos.x, adjpos.y, adjpos.z);
 				}
-			// You may also want to cancel the object's velocity
-			//bmesh.setLinearVelocity(new THREE.Vector3(0, 0, 0));
-			//bmesh.setAngularVelocity(new THREE.Vector3(0, 0, 0));
 			count = count +1;
 		}
 	}
