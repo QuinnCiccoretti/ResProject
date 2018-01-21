@@ -11,12 +11,17 @@
 	<script type="text/javascript" src="js/three.min.js"></script>
 	<script type="text/javascript" src="js/stats.js"></script>
 	<script type="text/javascript" src="js/physi.js"></script>
-	<script src="js/effects/OculusRiftEffect.js"></script>
-	<script src="js/controls/FirstPersonControls.js"></script>
-	<script src="js/controls/OculusControls.js"></script>
-	
+	<!-- <script src="js/effects/OculusRiftEffect.js"></script> -->
+	<!-- <script src="js/controls/FirstPersonControls.js"></script>
+	<script src="js/controls/OculusControls.js"></script> -->
+	<!-- Leap -->
 	<script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
 	<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>
+	<!-- Webvr -->
+	<script src="js/vr/ViveController.js"></script>
+	<script src="js/vr/WebVR.js"></script>
+	<script src="js/loaders/OBJLoader.js"></script>
+	<!-- JQuery -->
 	<script
 	src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
@@ -52,7 +57,7 @@
 		//from effect demo
 		var realcamera;
 		var guiVisible = true;
-		var mesh, effect, controls, oculuscontrol;
+		var mesh;
 		var clock = new THREE.Clock();
 		var mousehasbeenmoved = false;
 		var last_relv;
@@ -77,7 +82,7 @@
 		init_world = function() {
 			init_renderer();
 			init_camera();
-			init_effect();
+			// init_effect();
 			init_stats();
 			init_scene();
 			window.addEventListener( 'resize', onWindowResize, false );
@@ -92,8 +97,8 @@
 			camera.updateProjectionMatrix();
 			// realcamera.aspect = window.innerWidth / window.innerHeight;
 			//realcamera.updateProjectionMatrix();
-			effect.setSize( window.innerWidth, window.innerHeight );
-			controls.handleResize();
+			// effect.setSize( window.innerWidth, window.innerHeight );
+			// controls.handleResize();
 		}
 		
 		var _vector = new THREE.Vector3,
@@ -112,9 +117,9 @@
 			//renderer.render( scene, camera );
 			//effect
 			//var t = clock.getElapsedTime();
-			controls.update( clock.getDelta() );		//Necessary for movement
+			// controls.update( clock.getDelta() );		//Necessary for movement
 			//oculuscontrol.update( clock.getDelta() );	//Necessary for movement
-			effect.render( scene, camera );
+			// effect.render( scene, camera );
 			renderer.render( scene, camera );
 			scene.simulate( undefined, 1 );
 			render_stats.update();
