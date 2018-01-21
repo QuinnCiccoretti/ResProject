@@ -155,6 +155,15 @@
 		}
 		function init_all(){
 				// init_vars();
+				
+
+				var info = document.createElement( 'div' );
+				info.style.position = 'absolute';
+				info.style.top = '10px';
+				info.style.width = '100%';
+				info.style.textAlign = 'center';
+				info.innerHTML = '<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> htc vive webvr';
+				document.getElementById( 'viewport' ).appendChild( info );
 				$(".load").hide();
 				init_world();
 				init_leap(); 

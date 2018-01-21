@@ -6,7 +6,9 @@ function init_renderer(){
 		renderer.shadowMap.enabled = true;
 		renderer.shadowMapSoft = true;
 		renderer.setClearColor (0xffffff, 1);
+		// renderer.vr.enabled = true;
 		document.getElementById( 'viewport' ).appendChild( renderer.domElement );
+		document.body.appendChild(WEBVR.createButton( renderer ) );
 }
 function init_camera(){
 	//Init camera ////////////////////
@@ -30,22 +32,6 @@ function init_scene(){
 	scene.addEventListener(
 		'update',		//when physijs rendering is ready
 		function() {
-
-			if ( selected_block !== null ) {
-				
-				_v3.copy( mouse_position ).add( block_offset ).sub( selected_block.position ).multiplyScalar( 5 );
-				_v3.y = 0;
-				selected_block.setLinearVelocity( _v3 );
-				
-				// Reactivate all of the blocks
-				_v3.set( 0, 0, 0 );
-				for ( _i = 0; _i < blocks.length; _i++ ) {
-					blocks[_i].applyCentralImpulse( _v3 );
-				}
-			}
-
-			//scene.simulate( undefined, 1 );
-			//physics_stats.update();
 		}
 		);
 	// ambient light
