@@ -6,7 +6,7 @@ function init_renderer(){
 		renderer.shadowMap.enabled = true;
 		renderer.shadowMapSoft = true;
 		renderer.setClearColor (0xffffff, 1);
-		// renderer.vr.enabled = true;	//for some reason bricks everything
+		renderer.vr.enabled = true;	//for some reason bricks everything
 		document.getElementById( 'viewport' ).appendChild( renderer.domElement );
 		//create view in VR button
 		document.body.appendChild(WEBVR.createButton( renderer ) );	
@@ -28,21 +28,21 @@ function init_user(){
 	/////////////////////////////////////////////
 	//				Vive Controller			   //
 	/////////////////////////////////////////////
-	// var loader = new THREE.OBJLoader();
-	// loader.setPath( 'models/obj/vive-controller/' );
-	// loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
+	var loader = new THREE.OBJLoader();
+	loader.setPath( 'res/' );
+	loader.load( 'vr_controller_vive_1_5.obj', function ( object ) {
 
-	// 	var loader = new THREE.TextureLoader();
-	// 	loader.setPath( 'models/obj/vive-controller/' );
+		var loader = new THREE.TextureLoader();
+		loader.setPath( 'res/' );
 
-	// 	var controller = object.children[ 0 ];
-	// 	controller.material.map = loader.load( 'onepointfive_texture.png' );
-	// 	controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
+		var controller = object.children[ 0 ];
+		controller.material.map = loader.load( 'onepointfive_texture.png' );
+		controller.material.specularMap = loader.load( 'onepointfive_spec.png' );
 
-	// 	controller1.add( object.clone() );
-	// 	controller2.add( object.clone() );
+		controller1.add( object.clone() );
+		controller2.add( object.clone() );
 
-	// } );
+	} );
 
 }
 function init_scene(){
