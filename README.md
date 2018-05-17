@@ -1,4 +1,5 @@
 # Physics in Virtual Reality
+# This project is deprecated! Visit https://github.com/quinnciccoretti/physvr/ for the functioning project
 ## Quinn Ciccoretti, TJHSST
 ### Materials Needed
 #### Hardware
